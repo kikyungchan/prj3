@@ -1,26 +1,32 @@
 package com.example.backend.board.controller;
 
 import com.example.backend.board.dto.BoardDto;
+import com.example.backend.board.dto.BoardListInfo;
 import com.example.backend.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
-@Controller
+//@Controller
+//@ResponseBody
+@RestController // Controller + ResponseBody
 @RequestMapping("/api/board")
 @RequiredArgsConstructor
 public class BoardController {
 
     private final BoardService boardService;
 
+    @GetMapping("list")
+    public List<BoardListInfo> getAllBoards() {
+
+        return boardService.list();
+    }
+
     @PostMapping("add")
-    @ResponseBody
     public ResponseEntity<Object> add(@RequestBody BoardDto dto) {
 
         // 값들이 유효한지 확인

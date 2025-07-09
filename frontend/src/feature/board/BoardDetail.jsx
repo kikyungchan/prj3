@@ -8,11 +8,13 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  Modal,
   Row,
   Spinner,
 } from "react-bootstrap";
 
 export function BoardDetail() {
+  const [modalShow, setModalShow] = useState(false);
   const [board, setBoard] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -96,15 +98,35 @@ export function BoardDetail() {
         </div>
         <div>
           <Button
-            onClick={handleDeleteButtonClick}
+            onClick={() => setModalShow(true)}
             className="me-1"
             variant="outline-danger"
           >
             삭제
           </Button>
-          <Button variant="outline-info">수정</Button>
+          <Button
+            variant="outline-info"
+            onClick={() => navigate(`/board/edit?id=${board.id}`)}
+          >
+            수정
+          </Button>
         </div>
       </Col>
+
+      <Modal show={modalShow} onHide={() => setModalShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>게시물 삭제 확인</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{board.id}번 게시물을 삭제하시겠습니까?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+            취소
+          </Button>
+          <Button variant="outline-danger" onClick={handleDeleteButtonClick}>
+            삭제
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Row>
   );
 }

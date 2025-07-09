@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,5 +48,16 @@ public class BoardService {
 
     public List<BoardListInfo> list() {
         return boardRepository.findAllByOrderByIdDesc();
+    }
+
+    public BoardDto getBoardById(Integer id) {
+        Board board = boardRepository.findById(id).get();
+        BoardDto dto = new BoardDto();
+        dto.setTitle(board.getTitle());
+        dto.setContent(board.getContent());
+        dto.setAuthor(board.getAuthor());
+        dto.setId(board.getId());
+        dto.setInsertedAt(board.getInsertedAt());
+        return dto;
     }
 }

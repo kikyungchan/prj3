@@ -60,4 +60,8 @@ public class BoardService {
         dto.setInsertedAt(board.getInsertedAt());
         return dto;
     }
+
+    public void deleteById(Integer id) {
+        boardRepository.deleteById(id);
+    }
 }

@@ -8,6 +8,7 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export function MemberAdd() {
   const [email, setEmail] = useState("");
@@ -26,9 +27,17 @@ export function MemberAdd() {
       })
       .then((res) => {
         console.log("ㅇㅋ");
+        const message = res.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
       })
       .catch((err) => {
         console.log("ㄴㄴ");
+        const message = err.response.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
       })
       .finally(() => {
         console.log("항상");

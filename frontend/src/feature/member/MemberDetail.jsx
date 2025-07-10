@@ -18,7 +18,7 @@ export function MemberDetail() {
     axios
       .get(`/api/member?email=${params.get("email")}`)
       .then((res) => {
-        setMember(res.data());
+        setMember(res.data);
       })
       .catch((err) => {
         console.log("ㄴㄴ");
@@ -28,7 +28,7 @@ export function MemberDetail() {
       });
   }, []);
 
-  if (member) {
+  if (!member) {
     return <Spinner />;
   }
 

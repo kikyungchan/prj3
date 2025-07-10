@@ -11,8 +11,10 @@ import {
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 export function MemberAdd() {
+  const navigate = useNavigate();
   const [password2, setPassword2] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -36,6 +38,7 @@ export function MemberAdd() {
         if (message) {
           toast(message.text, { type: message.type });
         }
+        navigate("/");
       })
       .catch((err) => {
         console.log("ㄴㄴ");

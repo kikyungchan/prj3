@@ -7,7 +7,7 @@ export function MemberList() {
 
   useEffect(() => {
     axios
-      .get("api/member/list")
+      .get("/api/member/list")
       .then((res) => {
         setMemberList(res.data);
       })

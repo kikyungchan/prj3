@@ -5,18 +5,21 @@ import {
   FormGroup,
   FormLabel,
   Row,
+  Spinner,
 } from "react-bootstrap";
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
 export function MemberAdd() {
+  const [isProcessing, setIsProcessing] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nickName, setNickName] = useState("");
   const [info, setInfo] = useState("");
 
   function handleSaveClick() {
+    setIsProcessing(true);
     // post 로
     axios
       .post("/api/member/add", {
@@ -41,6 +44,7 @@ export function MemberAdd() {
       })
       .finally(() => {
         console.log("항상");
+        setIsProcessing(false);
       });
   }
 
@@ -99,7 +103,10 @@ export function MemberAdd() {
           </FormGroup>
         </div>
         <div>
-          <Button onClick={handleSaveClick}>가입</Button>
+          <Button onClick={handleSaveClick} disabled={isProcessing}>
+            {isProcessing && <Spinner size="sm" />}
+            가입
+          </Button>
         </div>
         <div></div>
         <div></div>

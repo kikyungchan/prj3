@@ -80,9 +80,8 @@ export function MemberAdd() {
           <FormGroup className="mb-3" controlId="email1">
             <FormLabel>이메일</FormLabel>
             <FormControl
-              type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.trim())}
             ></FormControl>
           </FormGroup>
         </div>

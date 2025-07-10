@@ -18,6 +18,27 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @PutMapping
+    public ResponseEntity<?> update(@RequestBody MemberForm memberForm) {
+//        System.out.println("memberForm = " + memberForm);
+        try {
+            memberService.update(memberForm);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.status(403).body( // 405 = 권한 없음 // 401 = 인증안됨/ 로그인안됨
+                    Map.of("message",
+                            Map.of("type", "error",
+                                    "text", message)));
+        }
+        return ResponseEntity.ok().body(
+                Map.of("message",
+                        Map.of("type", "success",
+                                "text", "회원 정보가 수정되었습니다.")));
+
+    }
+
     @DeleteMapping
     public ResponseEntity<?> deleteMember(@RequestBody MemberForm memberForm) {
         System.out.println("memberForm = " + memberForm);

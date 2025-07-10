@@ -4,14 +4,19 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  Modal,
   Row,
   Spinner,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
+import { toast } from "react-toastify";
 
 export function MemberDetail() {
+  const navigate = useNavigate();
+  const [modalShow, setModalShow] = useState(false);
+  const [password, setPassword] = useState("");
   const [params] = useSearchParams();
   const [member, setMember] = useState(null);
   useEffect(() => {
@@ -27,6 +32,29 @@ export function MemberDetail() {
         console.log("항상");
       });
   }, []);
+
+  function handleDeleteButtonClick() {
+    axios
+      .delete("/api/member", {
+        data: { email: member.email, password: password },
+      })
+      .then((res) => {
+        console.log("잘됀");
+        const message = res.data.message;
+        toast(message.text, { type: message.type });
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log("안됀");
+        const message = err.response.data.message;
+        toast(message.text, { type: message.type });
+      })
+      .finally(() => {
+        console.log("항상");
+        setModalShow(false);
+        setPassword("");
+      });
+  }
 
   if (!member) {
     return <Spinner />;
@@ -55,12 +83,42 @@ export function MemberDetail() {
           </FormGroup>
         </div>
         <div>
-          <Button variant="outline-danger" size="sm" className="me-2">
+          <Button
+            variant="outline-danger"
+            size="sm"
+            className="me-2"
+            onClick={() => setModalShow(true)}
+          >
             회원 탈퇴
           </Button>
           <Button variant="outline-info">수정</Button>
         </div>
       </Col>
+
+      {/*  삭제 확인 모달*/}
+      <Modal show={modalShow} onHide={() => setModalShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>회원 탈퇴 확인</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormGroup>
+            <FormLabel>암호</FormLabel>
+            <FormControl
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </FormGroup>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+            취소
+          </Button>
+          <Button variant="outline-danger" onClick={handleDeleteButtonClick}>
+            삭제
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Row>
   );
 }

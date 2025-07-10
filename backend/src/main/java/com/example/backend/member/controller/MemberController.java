@@ -18,6 +18,27 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @DeleteMapping
+    public ResponseEntity<?> deleteMember(@RequestBody MemberForm memberForm) {
+        System.out.println("memberForm = " + memberForm);
+        try {
+            memberService.delete(memberForm);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.status(403).body( // 405 = 권한 없음 // 401 = 인증안됨/ 로그인안됨
+                    Map.of("message",
+                            Map.of("type", "error",
+                                    "text", message)));
+        }
+        return ResponseEntity.ok().body(
+                Map.of("message",
+                        Map.of("type", "success",
+                                "text", "회원 정보가 삭제되었습니다.")));
+    }
+
+
     @GetMapping(params = "email")
     public MemberDto getMember(String email) {
         return memberService.get(email);
@@ -39,7 +60,7 @@ public class MemberController {
         return ResponseEntity.ok().body(
                 Map.of("message",
                         Map.of("type", "success",
-                                "text", "회원가입 되어습니다.")));
+                                "text", "회원가입 되었습니다.")));
     }
 
     @GetMapping("list")

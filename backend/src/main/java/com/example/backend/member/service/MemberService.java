@@ -79,8 +79,17 @@ public class MemberService {
         memberDto.setInfo(db.getInfo());
         memberDto.setEmail(db.getEmail());
         memberDto.setInsertedAt(db.getInsertedAt());
-        
+
         return memberDto;
 
+    }
+
+    public void delete(MemberForm memberForm) {
+        Member db = memberRepository.findById(memberForm.getEmail()).get();
+        if (db.getPassword().equals(memberForm.getPassword())) {
+            memberRepository.delete(db);
+        } else {
+            throw new RuntimeException("암호가 일치하지 않습니다.");
+        }
     }
 }

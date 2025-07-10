@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormText,
   Row,
   Spinner,
 } from "react-bootstrap";
@@ -12,11 +13,12 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 export function MemberAdd() {
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [email, setEmail] = useState("");
+  const [password2, setPassword2] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [nickName, setNickName] = useState("");
   const [info, setInfo] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   function handleSaveClick() {
     setIsProcessing(true);
@@ -60,6 +62,12 @@ export function MemberAdd() {
   if (nickName === "") {
     disabled = true;
   }
+  // password와 password2가 일치하지 않으면 비활성화
+  let passwordConfirm = true;
+  if (password !== password2) {
+    disabled = true;
+    passwordConfirm = false;
+  }
 
   return (
     <Row className="justify-content-center">
@@ -69,8 +77,9 @@ export function MemberAdd() {
           <FormGroup className="mb-3" controlId="email1">
             <FormLabel>이메일</FormLabel>
             <FormControl
+              type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value.trim())}
+              onChange={(e) => setEmail(e.target.value)}
             ></FormControl>
           </FormGroup>
         </div>
@@ -79,7 +88,7 @@ export function MemberAdd() {
             <FormLabel>암호</FormLabel>
             {/*type 은 password 인데 보이도록 text로 잠시 둠.*/}
             <FormControl
-              type="text"
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value.trim())}
             ></FormControl>
@@ -87,10 +96,18 @@ export function MemberAdd() {
         </div>
         <div>
           <FormGroup className="mb-3" controlId="password2">
-            {/*TODO: 암호확인 나중에적용.*/}
             <FormLabel>암호 확인</FormLabel>
             {/*type 은 password 인데 보이도록 text로 잠시 둠.*/}
-            <FormControl type="text" />
+            <FormControl
+              type="password"
+              value={password2}
+              onChange={(e) => setPassword2(e.target.value)}
+            />
+            {passwordConfirm || (
+              <FormText className="text-danger">
+                패스워드가 일치하지 않습니다.
+              </FormText>
+            )}
           </FormGroup>
         </div>
         <div>

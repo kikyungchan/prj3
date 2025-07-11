@@ -29,7 +29,7 @@ public class MemberController {
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();
-            return ResponseEntity.status(403).body( // 405 = 권한 없음 // 401 = 인증안됨/ 로그인안됨
+            return ResponseEntity.status(401).body( // 405 = 권한 없음 // 401 = 인증안됨/ 로그인안됨
                     Map.of("message",
                             Map.of("type", "error",
                                     "text", message)));

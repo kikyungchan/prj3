@@ -110,6 +110,13 @@ export function MemberEdit() {
       });
   }
 
+  function handleCancleButton() {
+    setOldPassword("");
+    setNewPassword1("");
+    setNewPassword2("");
+    setPasswordModalShow(false);
+  }
+
   if (!member) {
     return <Spinner />;
   }
@@ -201,10 +208,7 @@ export function MemberEdit() {
       </Modal>
 
       {/* 암호 변경 모달*/}
-      <Modal
-        show={passwordModalShow}
-        onHide={() => setPasswordModalShow(false)}
-      >
+      <Modal show={passwordModalShow} onHide={handleCancleButton}>
         <Modal.Header closeButton>
           <Modal.Title>암호변경 확인</Modal.Title>
         </Modal.Header>
@@ -240,10 +244,7 @@ export function MemberEdit() {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="outline-dark"
-            onClick={() => setPasswordModalShow(false)}
-          >
+          <Button variant="outline-dark" onClick={handleCancleButton}>
             취소
           </Button>
           <Button

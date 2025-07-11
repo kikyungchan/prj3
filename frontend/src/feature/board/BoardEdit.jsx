@@ -104,6 +104,8 @@ export function BoardEdit() {
           <FormGroup className="mb-3" controlId="author1">
             <FormLabel>작성자</FormLabel>
             <FormControl
+              disabled
+              readOnly
               value={board.author}
               onChange={(e) => setBoard({ ...board, author: e.target.value })}
             ></FormControl>

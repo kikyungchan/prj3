@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -11,14 +11,21 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function BoardAdd() {
+  const { user } = useContext(AuthenticationContext);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [author, setAuthor] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
   const navigate = useNavigate();
+  useEffect(() => {
+    if (user?.nickName) {
+      setAuthor(user.nickName);
+    }
+  }, [user]);
 
   function handleSaveButtonClick() {
     setIsProcessing(true);
@@ -88,10 +95,7 @@ export function BoardAdd() {
         <div>
           <FormGroup className="mb-3" controlId="author1">
             <FormLabel>작성자</FormLabel>
-            <FormControl
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
-            />
+            <FormControl value={author} disabled />
           </FormGroup>
         </div>
         <div className="mb-3">

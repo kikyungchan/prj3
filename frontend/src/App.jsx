@@ -10,11 +10,7 @@ import { MemberDetail } from "./feature/member/MemberDetail.jsx";
 import { MemberEdit } from "./feature/member/MemberEdit.jsx";
 import { MemberLogin } from "./feature/member/MemberLogin.jsx";
 import { MemberLogout } from "./feature/member/MemberLogout.jsx";
-import { createContext } from "react";
-import * as PropTypes from "prop-types";
 import { AuthenticationContextProvider } from "./common/AuthenticationContextProvider.jsx";
-
-AuthenticationContextProvider.propTypes = { children: PropTypes.node };
 
 function App() {
   return (

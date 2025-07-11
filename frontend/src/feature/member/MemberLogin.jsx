@@ -15,9 +15,9 @@ import { AuthenticationContext } from "../../common/AuthenticationContextProvide
 export function MemberLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-  // step.2 use context
+  // step2. use context
   const { login } = useContext(AuthenticationContext);
+  const navigate = useNavigate();
 
   function handleLogInButtonClick() {
     axios
@@ -37,6 +37,9 @@ export function MemberLogin() {
         const message = err.response.data.message;
         if (message) {
           toast(message.text, { type: message.type });
+        } else {
+          toast("로그인 중 오류가 발생했습니다.", { type: "error" });
+          console.error("로그인 에러:", err);
         }
       })
       .finally(() => {});
@@ -54,7 +57,7 @@ export function MemberLogin() {
           />
         </FormGroup>
         <FormGroup controlId="password1" className="mb-3">
-          <FormLabel>비밀번호</FormLabel>
+          <FormLabel>암호</FormLabel>
           <FormControl
             type="password"
             value={password}

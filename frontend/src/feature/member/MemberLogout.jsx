@@ -10,8 +10,10 @@ export function MemberLogout() {
 
   useEffect(() => {
     logout();
+
     toast("로그아웃 되었습니다.", { type: "success" });
     navigate("/login");
   }, []);
+
   return <Spinner />;
 }

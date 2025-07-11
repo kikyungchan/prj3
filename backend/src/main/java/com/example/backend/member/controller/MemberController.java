@@ -4,6 +4,8 @@ import com.example.backend.member.dto.*;
 import com.example.backend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,52 +20,66 @@ public class MemberController {
 
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody MemberLoginForm loginForm) {
-//        System.out.println("loginForm = " + loginForm);
-
+//        System.out.println(loginForm);
         try {
             String token = memberService.getToken(loginForm);
             return ResponseEntity.ok().body(
-                    Map.of("token", token, "message",
+                    Map.of("token", token,
+                            "message",
                             Map.of("type", "success",
                                     "text", "로그인 되었습니다.")));
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();
-            return ResponseEntity.status(401).body( // 405 = 권한 없음 // 401 = 인증안됨/ 로그인안됨
+            return ResponseEntity.status(401).body(
                     Map.of("message",
                             Map.of("type", "error",
                                     "text", message)));
         }
+
     }
 
     @PutMapping("changePassword")
-    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordForm data) {
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordForm data,
+                                            Authentication authentication) {
+        if (!authentication.getName().equals(data.getEmail())) {
+            return ResponseEntity.status(403).build();
+        }
+
         try {
             memberService.changePassword(data);
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();
-            return ResponseEntity.status(403).body( // 405 = 권한 없음 // 401 = 인증안됨/ 로그인안됨
+            return ResponseEntity.status(403).body(
                     Map.of("message",
                             Map.of("type", "error",
                                     "text", message)));
         }
+
         return ResponseEntity.ok().body(
                 Map.of("message",
                         Map.of("type", "success",
-                                "text", "암호 변경이 완료되었습니다.")));
+                                "text", "암호가 변경되었습니다.")));
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@RequestBody MemberForm memberForm) {
-//        System.out.println("memberForm = " + memberForm);
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> update(@RequestBody MemberForm memberForm,
+                                    Authentication authentication) {
+        if (!authentication.getName().equals(memberForm.getEmail())) {
+            return ResponseEntity.status(403).build();
+        }
+
+//        System.out.println(memberForm);
         try {
             memberService.update(memberForm);
 
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();
-            return ResponseEntity.status(403).body( // 405 = 권한 없음 // 401 = 인증안됨/ 로그인안됨
+            return ResponseEntity.status(403).body(
                     Map.of("message",
                             Map.of("type", "error",
                                     "text", message)));
@@ -72,19 +88,22 @@ public class MemberController {
                 Map.of("message",
                         Map.of("type", "success",
                                 "text", "회원 정보가 수정되었습니다.")));
-
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteMember(@RequestBody MemberForm memberForm) {
-        System.out.println("memberForm = " + memberForm);
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> deleteMember(@RequestBody MemberForm memberForm,
+                                          Authentication authentication) {
+        if (!authentication.getName().equals(memberForm.getEmail())) {
+            return ResponseEntity.status(403).build();
+        }
+
         try {
             memberService.delete(memberForm);
-
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();
-            return ResponseEntity.status(403).body( // 405 = 권한 없음 // 401 = 인증안됨/ 로그인안됨
+            return ResponseEntity.status(403).body(
                     Map.of("message",
                             Map.of("type", "error",
                                     "text", message)));
@@ -95,10 +114,19 @@ public class MemberController {
                                 "text", "회원 정보가 삭제되었습니다.")));
     }
 
-
     @GetMapping(params = "email")
-    public MemberDto getMember(String email) {
-        return memberService.get(email);
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getMember(String email, Authentication authentication) {
+        if (authentication.getName().equals(email)) {
+            return ResponseEntity.ok().body(memberService.get(email));
+        } else {
+            return ResponseEntity.status(403).build();
+        }
+    }
+
+    @GetMapping("list")
+    public List<MemberListInfo> list() {
+        return memberService.list();
     }
 
     @PostMapping("add")
@@ -114,14 +142,12 @@ public class MemberController {
                             Map.of("type", "error",
                                     "text", message)));
         }
+
         return ResponseEntity.ok().body(
                 Map.of("message",
                         Map.of("type", "success",
-                                "text", "회원가입 되었습니다.")));
+                                "text", "회원 가입 되었습니다."))
+        );
     }
 
-    @GetMapping("list")
-    public List<MemberListInfo> list() {
-        return memberService.list();
-    }
 }

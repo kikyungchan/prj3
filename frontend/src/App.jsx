@@ -78,19 +78,11 @@ function App() {
   }
 
   function handleButton9Click() {
-    const token = localStorage.getItem("token");
-    if (token) {
-      // 있으면 토큰 들고 요청
-      // Authorization 헤더에 "Bearer "를 앞에 붙이고
-      axios.get("/api/learn/jwt/sub9", {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
-    } else {
-      // 없으면 토큰 안들고 요청
-      axios.get("/api/learn/jwt/sub9");
-    }
+    axios.get("/api/learn/jwt/sub9", {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
   }
 
   function handleButton10Click() {

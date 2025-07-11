@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormText,
   Modal,
   Row,
   Spinner,
@@ -14,6 +15,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 export function MemberEdit() {
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword1, setNewPassword1] = useState("");
+  const [newPassword2, setNewPassword2] = useState("");
+  const [passwordModalShow, setPasswordModalShow] = useState(false);
   const [password, setPassword] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const navigate = useNavigate();
@@ -57,6 +62,28 @@ export function MemberEdit() {
       });
   }
 
+  // 암호 변경 버튼 활성화 여부
+
+  let changePasswordButtonDisabled = false;
+  let passwordConfirm = true;
+  if (oldPassword === "") {
+    changePasswordButtonDisabled = true;
+  }
+  if (newPassword1 === "") {
+    changePasswordButtonDisabled = true;
+  }
+  if (newPassword2 === "") {
+    changePasswordButtonDisabled = true;
+  }
+  if (newPassword1 !== newPassword2) {
+    changePasswordButtonDisabled = true;
+    passwordConfirm = false;
+  }
+
+  function handleChangePasswordButtonClick() {
+    axios.put;
+  }
+
   if (!member) {
     return <Spinner />;
   }
@@ -70,6 +97,14 @@ export function MemberEdit() {
             <FormLabel>이메일</FormLabel>
             <FormControl disabled value={member.email} />
           </FormGroup>
+        </div>
+        <div className="mb-4">
+          <Button
+            variant="outline-info"
+            onClick={() => setPasswordModalShow(true)}
+          >
+            암호 변경
+          </Button>
         </div>
         <div>
           <FormGroup controlId="nickName1" className="mb-3">
@@ -120,7 +155,7 @@ export function MemberEdit() {
           <Modal.Title>회원 정보 수정 확인</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <FormGroup>
+          <FormGroup controlId="password1">
             <FormLabel>암호</FormLabel>
             <FormControl
               type="password"
@@ -135,6 +170,62 @@ export function MemberEdit() {
           </Button>
           <Button variant="outline-primary" onClick={handleSaveButtonClick}>
             저장
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* 암호 변경 모달*/}
+      <Modal
+        show={passwordModalShow}
+        onHide={() => setPasswordModalShow(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>암호변경 확인</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormGroup className="mb-3" controlId="password2">
+            <FormLabel>현재 암호</FormLabel>
+            <FormControl
+              type="password"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup className="mb-3" controlId="password3">
+            <FormLabel>변경할 암호</FormLabel>
+            <FormControl
+              type="password"
+              value={newPassword1}
+              onChange={(e) => setNewPassword1(e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup className="mb-3" controlId="password4">
+            <FormLabel>변경할 암호 확인</FormLabel>
+            <FormControl
+              type="password"
+              value={newPassword2}
+              onChange={(e) => setNewPassword2(e.target.value)}
+            />
+            {passwordConfirm || (
+              <FormText className="text-danger">
+                패스워드가 일치하지 않습니다.
+              </FormText>
+            )}
+          </FormGroup>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="outline-dark"
+            onClick={() => setPasswordModalShow(false)}
+          >
+            취소
+          </Button>
+          <Button
+            variant="outline-primary"
+            onClick={handleChangePasswordButtonClick}
+            disabled={changePasswordButtonDisabled}
+          >
+            변경
           </Button>
         </Modal.Footer>
       </Modal>

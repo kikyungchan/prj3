@@ -17,9 +17,23 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("login")
-    public String login(@RequestBody MemberLoginForm loginForm) {
-        System.out.println("loginForm = " + loginForm);
-        return null;
+    public ResponseEntity<?> login(@RequestBody MemberLoginForm loginForm) {
+//        System.out.println("loginForm = " + loginForm);
+
+        try {
+            String token = memberService.getToken(loginForm);
+            return ResponseEntity.ok().body(
+                    Map.of("token", token, "message",
+                            Map.of("type", "success",
+                                    "text", "로그인 되었습니다.")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.status(403).body( // 405 = 권한 없음 // 401 = 인증안됨/ 로그인안됨
+                    Map.of("message",
+                            Map.of("type", "error",
+                                    "text", message)));
+        }
     }
 
     @PutMapping("changePassword")

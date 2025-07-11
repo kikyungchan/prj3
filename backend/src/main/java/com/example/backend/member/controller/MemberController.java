@@ -1,5 +1,6 @@
 package com.example.backend.member.controller;
 
+import com.example.backend.member.dto.ChangePasswordForm;
 import com.example.backend.member.dto.MemberDto;
 import com.example.backend.member.dto.MemberForm;
 import com.example.backend.member.dto.MemberListInfo;
@@ -17,6 +18,24 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
+
+    @PutMapping("changePassword")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordForm data) {
+        try {
+            memberService.changePassword(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.status(403).body( // 405 = 권한 없음 // 401 = 인증안됨/ 로그인안됨
+                    Map.of("message",
+                            Map.of("type", "error",
+                                    "text", message)));
+        }
+        return ResponseEntity.ok().body(
+                Map.of("message",
+                        Map.of("type", "success",
+                                "text", "암호 변경이 완료되었습니다.")));
+    }
 
     @PutMapping
     public ResponseEntity<?> update(@RequestBody MemberForm memberForm) {

@@ -4,6 +4,7 @@ import com.example.backend.board.dto.BoardListInfo;
 import com.example.backend.board.entity.Board;
 import com.example.backend.board.dto.BoardDto;
 import com.example.backend.board.repository.BoardRepository;
+import com.example.backend.member.dto.BoardListDto;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -51,8 +52,10 @@ public class BoardService {
         return true;
     }
 
-    public List<BoardListInfo> list() {
-        return boardRepository.findAllByOrderByIdDesc();
+    public List<BoardListDto> list() {
+
+//        return boardRepository.findAllByOrderByIdDesc();
+        return boardRepository.findAllBy();
     }
 
     public BoardDto getBoardById(Integer id) {

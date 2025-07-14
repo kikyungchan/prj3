@@ -1,6 +1,5 @@
 package com.example.backend.board.service;
 
-import com.example.backend.board.dto.BoardListInfo;
 import com.example.backend.board.entity.Board;
 import com.example.backend.board.dto.BoardDto;
 import com.example.backend.board.repository.BoardRepository;
@@ -69,8 +68,16 @@ public class BoardService {
         return board;
     }
 
-    public void deleteById(Integer id) {
-        boardRepository.deleteById(id);
+    public void deleteById(Integer id, Authentication authentication) {
+        if (authentication == null) {
+            throw new RuntimeException("권한이 없습니다.");
+        }
+        Board db = boardRepository.findById(id).get();
+        if (db.getAuthor().getEmail().equals(authentication.getName())) {
+            boardRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("권한이 없습니다.");
+        }
     }
 
     public void update(BoardDto boardDto) {

@@ -13,7 +13,7 @@ if (token) {
 }
 
 // axios interceptor
-// token 이 있으면 Authorization 헤더에 'Bearer token' 붙이기
+// token 이 있으면 Authorization 헤더에 'Bearer ${token}' 붙이기
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
 

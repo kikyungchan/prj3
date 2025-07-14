@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import {
@@ -12,12 +12,15 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function BoardDetail() {
   const [modalShow, setModalShow] = useState(false);
   const [board, setBoard] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
+  const { hasAccess } = useContext(AuthenticationContext);
+
   useEffect(() => {
     //axios로 해당 게시물 가져오기
     axios
@@ -96,21 +99,23 @@ export function BoardDetail() {
             />
           </FormGroup>
         </div>
-        <div>
-          <Button
-            onClick={() => setModalShow(true)}
-            className="me-1"
-            variant="outline-danger"
-          >
-            삭제
-          </Button>
-          <Button
-            variant="outline-info"
-            onClick={() => navigate(`/board/edit?id=${board.id}`)}
-          >
-            수정
-          </Button>
-        </div>
+        {hasAccess(board.authorEmail) && (
+          <div>
+            <Button
+              onClick={() => setModalShow(true)}
+              className="me-1"
+              variant="outline-danger"
+            >
+              삭제
+            </Button>
+            <Button
+              variant="outline-info"
+              onClick={() => navigate(`/board/edit?id=${board.id}`)}
+            >
+              수정
+            </Button>
+          </div>
+        )}
       </Col>
 
       <Modal show={modalShow} onHide={() => setModalShow(false)}>

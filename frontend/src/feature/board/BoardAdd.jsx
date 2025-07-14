@@ -14,18 +14,12 @@ import {
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function BoardAdd() {
-  const { user } = useContext(AuthenticationContext);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [author, setAuthor] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const { user } = useContext(AuthenticationContext);
 
   const navigate = useNavigate();
-  useEffect(() => {
-    if (user?.nickName) {
-      setAuthor(user.nickName);
-    }
-  }, [user]);
 
   function handleSaveButtonClick() {
     setIsProcessing(true);
@@ -33,7 +27,6 @@ export function BoardAdd() {
       .post("/api/board/add", {
         title: title,
         content: content,
-        author: author,
       })
       .then((res) => {
         const message = res.data.message;
@@ -60,9 +53,6 @@ export function BoardAdd() {
   // 작성자 제목 본문 썻는 지
   let validate = true;
   if (title.trim() === "") {
-    validate = false;
-  }
-  if (content.trim() === "") {
     validate = false;
   }
   if (content.trim() === "") {
@@ -95,7 +85,7 @@ export function BoardAdd() {
         <div>
           <FormGroup className="mb-3" controlId="author1">
             <FormLabel>작성자</FormLabel>
-            <FormControl value={author} disabled />
+            <FormControl value={user.nickName} disabled />
           </FormGroup>
         </div>
         <div className="mb-3">

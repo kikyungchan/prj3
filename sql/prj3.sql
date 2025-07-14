@@ -20,5 +20,13 @@ CREATE TABLE member
     CONSTRAINT pk_member PRIMARY KEY (email)
 );
 
-DROP TABLE member;
+INSERT INTO board
+    (title, content, author, inserted_at)
+SELECT title, content, author, inserted_at
+FROM board;
+
+SELECT COUNT(*)
+FROM board;
+
+
 

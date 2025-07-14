@@ -51,10 +51,10 @@ public class BoardService {
         return true;
     }
 
-    public List<BoardListDto> list() {
+    public List<BoardListDto> list(String keyword) {
 
 //        return boardRepository.findAllByOrderByIdDesc();
-        return boardRepository.findAllBy();
+        return boardRepository.findAllBy(keyword);
     }
 
     public BoardDto getBoardById(Integer id) {

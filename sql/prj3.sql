@@ -25,16 +25,6 @@ CREATE TABLE member
     CONSTRAINT pk_member PRIMARY KEY (email)
 );
 
-# 테스트용 정보 복사
-INSERT INTO board
-    (title, content, author, inserted_at)
-SELECT title, content, author, inserted_at
-FROM board;
-
-# 정보 갯수 세기
-SELECT COUNT(*)
-FROM board;
-
 
 # 권한 테이블
 CREATE TABLE auth
@@ -52,7 +42,20 @@ VALUES ('trump@abc.com', 'admin');
 SELECT *
 FROM auth;
 
+# 테스트용 정보 복사
+INSERT INTO board
+    (title, content, author)
+values ('qwe', 'asd', '99@99.com'),
+       ('zxc', '123', '99@99.com'),
+       ('456', 'rty', '99@99.com'),
+       ('fgh', 'vbn', '88@88.com'),
+       ('789', 'uio', '88@88.com'),
+       ('jkl', 'nmp', '88@88.com');
 
+
+# 정보 갯수 세기
+SELECT COUNT(*)
+FROM board;
 
 
 

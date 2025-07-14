@@ -59,9 +59,9 @@ public class BoardController {
     }
 
     @GetMapping("list")
-    public List<BoardListDto> getAllBoards() {
+    public List<BoardListDto> getAllBoards(@RequestParam(value = "q", defaultValue = "") String keyword) {
 
-        return boardService.list();
+        return boardService.list(keyword);
     }
 
     @PostMapping("add")

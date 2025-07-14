@@ -59,9 +59,10 @@ public class BoardController {
     }
 
     @GetMapping("list")
-    public List<BoardListDto> getAllBoards(@RequestParam(value = "q", defaultValue = "") String keyword) {
+    public Map<String, Object> getAllBoards(@RequestParam(value = "q", defaultValue = "") String keyword,
+                                            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
 
-        return boardService.list(keyword);
+        return boardService.list(keyword, pageNumber);
     }
 
     @PostMapping("add")

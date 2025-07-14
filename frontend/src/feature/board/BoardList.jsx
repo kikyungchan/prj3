@@ -10,7 +10,7 @@ export function BoardList() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 마운트 될 때(initial render 시) 실행되는 코드
+    // 마운트될때(initial render 시) 실행되는 코드
     axios
       .get(`/api/board/list?${searchParams}`)
       .then((res) => {
@@ -19,10 +19,10 @@ export function BoardList() {
         setPageInfo(res.data.pageInfo);
       })
       .catch((err) => {
-        console.log("잘 안될 코드");
+        console.log("잘 안될 때 코드");
       })
       .finally(() => {
-        console.log("항상 코드");
+        console.log("항상 실행 코드");
       });
   }, [searchParams]);
 
@@ -52,13 +52,14 @@ export function BoardList() {
   return (
     <>
       <Row className="my-3">
-        {/*페이지네이션*/}
         <Col>
           <Pagination>
             <Pagination.First
+              disabled={pageInfo.currentPageNumber === 1}
               onClick={() => handlePageNumberClick(1)}
             ></Pagination.First>
             <Pagination.Prev
+              disabled={pageInfo.leftPageNumber <= 1}
               onClick={() =>
                 handlePageNumberClick(pageInfo.leftPageNumber - 10)
               }
@@ -67,16 +68,19 @@ export function BoardList() {
               <Pagination.Item
                 key={pageNumber}
                 onClick={() => handlePageNumberClick(pageNumber)}
+                active={pageInfo.currentPageNumber === pageNumber}
               >
                 {pageNumber}
               </Pagination.Item>
             ))}
             <Pagination.Next
+              disabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
               onClick={() =>
                 handlePageNumberClick(pageInfo.rightPageNumber + 1)
               }
             ></Pagination.Next>
             <Pagination.Last
+              disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
               onClick={() => handlePageNumberClick(pageInfo.totalPages)}
             ></Pagination.Last>
           </Pagination>
@@ -122,7 +126,7 @@ export function BoardList() {
             </Table>
           ) : (
             <p>
-              작성된 글이 없습니다. <br />새 글을 작성 해주세요.
+              작성된 글이 없습니다. <br />새 글을 작성해 보세요.
             </p>
           )}
         </Col>

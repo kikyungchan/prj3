@@ -1,23 +1,25 @@
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import {
   Button,
   Container,
+  Form,
   FormControl,
   InputGroup,
   Nav,
   Navbar,
-  Form,
 } from "react-bootstrap";
 import { useContext, useState } from "react";
 import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
-import axios from "axios";
 
 export function AppNavBar() {
+  const navigate = useNavigate();
   const [keyword, setKeyword] = useState("");
   const { user, isAdmin } = useContext(AuthenticationContext);
 
-  function handleSearchFormSubmit() {
-    console.log("조회 폼 서브밋");
+  function handleSearchFormSubmit(e) {
+    e.preventDefault();
+    // console.log("조회 폼 서브밋");
+    navigate("/?q=" + keyword);
   }
 
   return (
@@ -69,7 +71,7 @@ export function AppNavBar() {
 
             <Form
               className="order-lg-2 mx-lg-auto"
-              inline
+              inline="true"
               onSubmit={handleSearchFormSubmit}
             >
               <InputGroup>

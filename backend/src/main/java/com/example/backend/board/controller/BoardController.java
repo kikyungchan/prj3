@@ -3,6 +3,7 @@ package com.example.backend.board.controller;
 import com.example.backend.board.dto.BoardDto;
 import com.example.backend.board.dto.BoardListInfo;
 import com.example.backend.board.service.BoardService;
+import com.example.backend.member.dto.BoardListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -54,7 +55,7 @@ public class BoardController {
     }
 
     @GetMapping("list")
-    public List<BoardListInfo> getAllBoards() {
+    public List<BoardListDto> getAllBoards() {
 
         return boardService.list();
     }

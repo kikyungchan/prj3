@@ -59,14 +59,14 @@ public class BoardService {
     }
 
     public BoardDto getBoardById(Integer id) {
-        Board board = boardRepository.findById(id).get();
-        BoardDto dto = new BoardDto();
-        dto.setTitle(board.getTitle());
-        dto.setContent(board.getContent());
-        dto.setAuthor(board.getAuthor());
-        dto.setId(board.getId());
-        dto.setInsertedAt(board.getInsertedAt());
-        return dto;
+        BoardDto board = boardRepository.findBoardById(id);
+//        BoardDto dto = new BoardDto();
+//        dto.setTitle(board.getTitle());
+//        dto.setContent(board.getContent());
+//        dto.setAuthor(board.getAuthor());
+//        dto.setId(board.getId());
+//        dto.setInsertedAt(board.getInsertedAt());
+        return board;
     }
 
     public void deleteById(Integer id) {

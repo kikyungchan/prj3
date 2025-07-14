@@ -20,7 +20,7 @@ export function MemberDetail() {
   const [password, setPassword] = useState("");
   const [params] = useSearchParams();
   const [member, setMember] = useState(null);
-  const { logout } = useContext(AuthenticationContext);
+  const { logout, hasAccess } = useContext(AuthenticationContext);
   useEffect(() => {
     axios
       .get(`/api/member?email=${params.get("email")}`)
@@ -95,22 +95,24 @@ export function MemberDetail() {
             />
           </FormGroup>
         </div>
-        <div>
-          <Button
-            variant="outline-danger"
-            size="sm"
-            className="me-2"
-            onClick={() => setModalShow(true)}
-          >
-            회원 탈퇴
-          </Button>
-          <Button
-            onClick={() => navigate(`/member/edit?email=${member.email}`)}
-            variant="outline-info"
-          >
-            수정
-          </Button>
-        </div>
+        {hasAccess(member.email) && (
+          <div>
+            <Button
+              variant="outline-danger"
+              size="sm"
+              className="me-2"
+              onClick={() => setModalShow(true)}
+            >
+              회원 탈퇴
+            </Button>
+            <Button
+              onClick={() => navigate(`/member/edit?email=${member.email}`)}
+              variant="outline-info"
+            >
+              수정
+            </Button>
+          </div>
+        )}
       </Col>
 
       {/*  삭제 확인 모달*/}

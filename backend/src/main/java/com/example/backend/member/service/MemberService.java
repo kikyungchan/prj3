@@ -99,7 +99,6 @@ public class MemberService {
         } else {
             throw new RuntimeException("암호가 일치하지 않습니다.");
         }
-        // TODO:삭제후 로그아웃하기
     }
 
     public void update(MemberForm memberForm) {
@@ -107,8 +106,10 @@ public class MemberService {
         Member db = memberRepository.findById(memberForm.getEmail()).get();
 
         //암호 확인
-        if (!db.getPassword().equals(memberForm.getPassword())) {
+//        if (!db.getPassword().equals(memberForm.getPassword())) {
+        if (!passwordEncoder.matches(memberForm.getPassword(), db.getPassword())) {
             throw new RuntimeException("암호가 일치하지 않습니다.");
+
         }
 
         // 변경

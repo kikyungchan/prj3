@@ -72,9 +72,6 @@ export function BoardEdit() {
   if (board.content.trim() === "") {
     validate = false;
   }
-  if (board.author.trim() === "") {
-    validate = false;
-  }
 
   return (
     <Row className="justify-content-center">
@@ -106,8 +103,7 @@ export function BoardEdit() {
             <FormControl
               disabled
               readOnly
-              value={board.author}
-              onChange={(e) => setBoard({ ...board, author: e.target.value })}
+              value={board.authorNickName}
             ></FormControl>
           </FormGroup>
         </div>

@@ -13,6 +13,7 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
+import { CommentContainer } from "../comment/CommentContainer.jsx";
 
 export function BoardDetail() {
   const [modalShow, setModalShow] = useState(false);
@@ -116,6 +117,9 @@ export function BoardDetail() {
             </Button>
           </div>
         )}
+
+        {/*  댓글 컴포넌트 */}
+        <CommentContainer boardId={board.id} />
       </Col>
 
       <Modal show={modalShow} onHide={() => setModalShow(false)}>

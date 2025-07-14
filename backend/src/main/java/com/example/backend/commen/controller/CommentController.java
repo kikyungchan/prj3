@@ -1,0 +1,38 @@
+package com.example.backend.commen.controller;
+
+import com.example.backend.commen.dto.CommentForm;
+import com.example.backend.commen.service.CommentService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/comment")
+public class CommentController {
+
+    private final CommentService commentService;
+
+    @PostMapping
+    public ResponseEntity<?> addComment(@RequestBody CommentForm comment,
+                                        Authentication authentication) {
+        try {
+            commentService.add(comment, authentication);
+            return ResponseEntity.ok()
+                    .body(Map.of("message",
+                            Map.of("type", "success",
+                                    "text", "새 댓글이 등록되었습니다.")));
+        } catch (Exception e) {
+            return ResponseEntity.ok()
+                    .body(Map.of("message",
+                            Map.of("type", "error",
+                                    "text", e.getMessage())));
+        }
+    }
+}

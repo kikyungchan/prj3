@@ -42,7 +42,7 @@ VALUES ('trump@abc.com', 'admin');
 SELECT *
 FROM auth;
 
-# 테스트용 정보 복사
+# 회원정보넣기
 INSERT INTO board
     (title, content, author)
 values ('qwe', 'asd', '99@99.com'),
@@ -56,6 +56,13 @@ values ('qwe', 'asd', '99@99.com'),
 # 정보 갯수 세기
 SELECT COUNT(*)
 FROM board;
+
+#페이지 테스트용 데이터
+INSERT INTO board
+    (title, content, author)
+SELECT title, content, author
+FROM board;
+
 
 
 

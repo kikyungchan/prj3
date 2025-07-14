@@ -36,6 +36,27 @@ SELECT COUNT(*)
 FROM board;
 
 
+# 권한 테이블
+CREATE TABLE auth
+(
+    member_email VARCHAR(255) NOT NULL,
+    auth_name    VARCHAR(255) NOT NULL,
+    PRIMARY KEY (member_email, auth_name),
+    FOREIGN KEY (member_email) REFERENCES member (email)
+);
+
+INSERT INTO auth
+    (member_email, auth_name)
+VALUES ('trump@abc.com', 'admin');
+
+SELECT *
+FROM auth;
+
+
+
+
+
+
 
 
 

@@ -19,7 +19,7 @@ export function CommentList({ boardId }) {
 
   useEffect(() => {
     axios
-      .get("/api/comment/board/{boardId}")
+      .get(`/api/comment/board/${boardId}`)
       .then((res) => {
         setCommentList(res.data);
       })

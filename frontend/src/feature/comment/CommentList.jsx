@@ -4,7 +4,7 @@ import { Spinner } from "react-bootstrap";
 
 function ComentItem({ comment }) {
   return (
-    <div className="border-1 m-3">
+    <div className="border m-3">
       <div className="d-flex justify-content-between m-3">
         <div>{comment.authorNickName}</div>
         <div>{comment.timesAgo}</div>
@@ -25,7 +25,7 @@ export function CommentList({ boardId }) {
       })
       .catch((err) => {})
       .finally(() => {});
-  });
+  }, []);
 
   if (commentList === null) {
     return <Spinner />;

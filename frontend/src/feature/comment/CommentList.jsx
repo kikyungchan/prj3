@@ -14,7 +14,7 @@ function ComentItem({ comment }) {
   );
 }
 
-export function CommentList({ boardId }) {
+export function CommentList({ boardId, reloadTrigger }) {
   const [commentList, setCommentList] = useState(null);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export function CommentList({ boardId }) {
       })
       .catch((err) => {})
       .finally(() => {});
-  }, []);
+  }, [boardId, reloadTrigger]);
 
   if (commentList === null) {
     return <Spinner />;

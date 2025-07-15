@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
-export function CommentAdd({ boardId }) {
+export function CommentAdd({ boardId, onSave }) {
   const [comment, setComment] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const { user } = useContext(AuthenticationContext);
@@ -19,6 +19,9 @@ export function CommentAdd({ boardId }) {
           toast(message.text, { type: message.type });
         }
         setComment("");
+        if (onSave) {
+          onSave();
+        }
       })
       .catch((err) => {
         const message = err.response.data.message;

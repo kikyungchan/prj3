@@ -1,15 +1,15 @@
 package com.example.backend.comment.controller;
 
 import com.example.backend.comment.dto.CommentForm;
+import com.example.backend.comment.dto.CommentListDto;
 import com.example.backend.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -19,7 +19,13 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    @GetMapping("board/{boardId}")
+    public List<CommentListDto> list(@PathVariable Integer boardId) {
+        return commentService.listByBoardId(boardId);
+    }
+
     @PostMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> addComment(@RequestBody CommentForm comment,
                                         Authentication authentication) {
         try {
@@ -34,5 +40,6 @@ public class CommentController {
                             Map.of("type", "error",
                                     "text", e.getMessage())));
         }
+
     }
 }

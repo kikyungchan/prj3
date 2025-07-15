@@ -40,21 +40,29 @@ export function CommentAdd({ boardId }) {
     <div>
       <FloatingLabel
         controlId="commentTextarea1"
-        label={user !== null ? "댓글을 작성해보세요" : "로그인 해주세요."}
+        label={
+          user === null
+            ? "댓글을 작성하려면 로그인하세요."
+            : "댓글을 작성해보세요."
+        }
       >
         <FormControl
           placeholder={
-            user !== null ? "댓글을 작성해보세요" : "로그인 해주세요."
+            user === null
+              ? "댓글을 작성하려면 로그인하세요."
+              : "댓글을 작성해보세요."
           }
-          style={{ height: "150px" }}
           as="textarea"
-          row={3}
+          style={{ height: "150px" }}
           value={comment}
           disabled={user === null}
           onChange={(e) => setComment(e.target.value)}
         />
       </FloatingLabel>
-      <Button disabled={saveButtonDisabled} onClick={handleCommentSaveClick}>
+      <Button
+        disabled={isProcessing || saveButtonDisabled}
+        onClick={handleCommentSaveClick}
+      >
         {isProcessing && <Spinner size="sm" />}
         댓글 저장
       </Button>

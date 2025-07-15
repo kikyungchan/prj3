@@ -1,4 +1,4 @@
-package com.example.backend.commen.dto;
+package com.example.backend.comment.dto;
 
 import lombok.Data;
 

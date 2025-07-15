@@ -1,7 +1,7 @@
-package com.example.backend.commen.controller;
+package com.example.backend.comment.controller;
 
-import com.example.backend.commen.dto.CommentForm;
-import com.example.backend.commen.service.CommentService;
+import com.example.backend.comment.dto.CommentForm;
+import com.example.backend.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

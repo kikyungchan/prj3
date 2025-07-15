@@ -1,10 +1,10 @@
-package com.example.backend.commen.service;
+package com.example.backend.comment.service;
 
 import com.example.backend.board.entity.Board;
 import com.example.backend.board.repository.BoardRepository;
-import com.example.backend.commen.dto.CommentForm;
-import com.example.backend.commen.entity.Comment;
-import com.example.backend.commen.repository.CommentRepository;
+import com.example.backend.comment.dto.CommentForm;
+import com.example.backend.comment.entity.Comment;
+import com.example.backend.comment.repository.CommentRepository;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

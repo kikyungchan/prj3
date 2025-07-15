@@ -1,6 +1,6 @@
-package com.example.backend.commen.repository;
+package com.example.backend.comment.repository;
 
-import com.example.backend.commen.entity.Comment;
+import com.example.backend.comment.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CommentRepository extends JpaRepository<Comment, Integer> {

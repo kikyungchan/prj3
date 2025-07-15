@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Spinner } from "react-bootstrap";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import { toast } from "react-toastify";
 
 function CommentItem({ comment, isProcessing, setisProcessing }) {
+  const [editModalShow, setEditModalShow] = useState(false);
+  const [deleteModalShow, setDeleteModalShow] = useState(false);
+
   function handleDeleteButtonClick() {
     setisProcessing(true);
     axios
@@ -16,7 +19,12 @@ function CommentItem({ comment, isProcessing, setisProcessing }) {
       })
       .finally(() => {
         setisProcessing(false);
+        setDeleteModalShow(false);
       });
+  }
+
+  function handleUpdateButtonClick() {
+    // todo: 댓글 수정 코드...
   }
 
   return (
@@ -27,12 +35,57 @@ function CommentItem({ comment, isProcessing, setisProcessing }) {
       </div>
       <div>{comment.comment}</div>
       <div>
-        <Button disabled={isProcessing} onClick={handleDeleteButtonClick}>
+        <Button
+          disabled={isProcessing}
+          onClick={() => setDeleteModalShow(true)}
+        >
           {isProcessing && <Spinner size="sm" />}
           삭제
         </Button>
         <Button>수정</Button>
       </div>
+      {/*  댓글삭제모달*/}
+      <Modal show={deleteModalShow} onHide={() => setDeleteModalShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>댓글 삭제 확인</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>댓글을 삭제하시겠습니까?</Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="outline-dark"
+            onClick={() => setDeleteModalShow(false)}
+          >
+            취소
+          </Button>
+          <Button
+            variant="outline-danger"
+            onClick={handleDeleteButtonClick}
+            disabled={isProcessing}
+          >
+            {isProcessing && <Spinner size="sm" />}
+            삭제
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/*  댓글수정모달*/}
+      <Modal show={editModalShow} onHide={() => setEditModalShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>게시물 삭제 확인</Modal.Title>
+        </Modal.Header>
+        <Modal.Body></Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="outline-dark"
+            onClick={() => setEditModalShow(false)}
+          >
+            취소
+          </Button>
+          <Button variant="outline-primary" onClick={handleUpdateButtonClick}>
+            저장
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

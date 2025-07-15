@@ -1,94 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Modal, Spinner } from "react-bootstrap";
-import { toast } from "react-toastify";
-
-function CommentItem({ comment, isProcessing, setisProcessing }) {
-  const [editModalShow, setEditModalShow] = useState(false);
-  const [deleteModalShow, setDeleteModalShow] = useState(false);
-
-  function handleDeleteButtonClick() {
-    setisProcessing(true);
-    axios
-      .delete(`/api/comment/${comment.id}`)
-      .then(() => {
-        toast("댓글이 삭제 되었습니다.", { type: "success" });
-      })
-      .catch(() => {
-        toast("댓글 삭제 중 문제가 발생하였습니다.", { type: "error" });
-      })
-      .finally(() => {
-        setisProcessing(false);
-        setDeleteModalShow(false);
-      });
-  }
-
-  function handleUpdateButtonClick() {
-    // todo: 댓글 수정 코드...
-  }
-
-  return (
-    <div className="border m-3">
-      <div className="d-flex justify-content-between m-3">
-        <div>{comment.authorNickName}</div>
-        <div>{comment.timesAgo}</div>
-      </div>
-      <div>{comment.comment}</div>
-      <div>
-        <Button
-          disabled={isProcessing}
-          onClick={() => setDeleteModalShow(true)}
-        >
-          {isProcessing && <Spinner size="sm" />}
-          삭제
-        </Button>
-        <Button>수정</Button>
-      </div>
-      {/*  댓글삭제모달*/}
-      <Modal show={deleteModalShow} onHide={() => setDeleteModalShow(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>댓글 삭제 확인</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>댓글을 삭제하시겠습니까?</Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="outline-dark"
-            onClick={() => setDeleteModalShow(false)}
-          >
-            취소
-          </Button>
-          <Button
-            variant="outline-danger"
-            onClick={handleDeleteButtonClick}
-            disabled={isProcessing}
-          >
-            {isProcessing && <Spinner size="sm" />}
-            삭제
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/*  댓글수정모달*/}
-      <Modal show={editModalShow} onHide={() => setEditModalShow(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>게시물 삭제 확인</Modal.Title>
-        </Modal.Header>
-        <Modal.Body></Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="outline-dark"
-            onClick={() => setEditModalShow(false)}
-          >
-            취소
-          </Button>
-          <Button variant="outline-primary" onClick={handleUpdateButtonClick}>
-            저장
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
-  );
-}
+import { Spinner } from "react-bootstrap";
+import { CommentItem } from "./CommentItem.jsx";
 
 export function CommentList({ boardId, isProcessing, setIsProcessing }) {
   const [commentList, setCommentList] = useState(null);
@@ -113,7 +26,7 @@ export function CommentList({ boardId, isProcessing, setIsProcessing }) {
     <div>
       {commentList.map((comment) => (
         <CommentItem
-          setisProcessing={setIsProcessing}
+          setIsProcessing={setIsProcessing}
           isProcessing={isProcessing}
           comment={comment}
           key={comment.id}

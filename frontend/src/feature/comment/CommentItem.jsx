@@ -3,6 +3,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import {
   Button,
+  Card,
+  CardBody,
+  CardHeader,
   FormControl,
   FormGroup,
   FormLabel,
@@ -10,6 +13,9 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
+import { BsTrash3 } from "react-icons/bs";
+import { LuClock3, LuPencil } from "react-icons/lu";
+import { TiUser } from "react-icons/ti";
 
 export function CommentItem({ comment, isProcessing, setIsProcessing }) {
   const [deleteModalShow, setDeleteModalShow] = useState(false);
@@ -54,30 +60,47 @@ export function CommentItem({ comment, isProcessing, setIsProcessing }) {
   }
 
   return (
-    <div className="border m-3">
-      <div className="d-flex justify-content-between m-3">
-        <div>{comment.authorNickName}</div>
-        <div>{comment.timesAgo}</div>
+    <>
+      <div className="position-relative">
+        <Card className="my-3">
+          <CardHeader className="d-flex justify-content-between">
+            <div style={{ fontWeight: "bold" }}>
+              <TiUser />
+              {comment.authorNickName}
+            </div>
+            <small>
+              <LuClock3 />
+              {comment.timesAgo}
+            </small>
+          </CardHeader>
+          <CardBody>
+            <div style={{ whiteSpace: "pre" }}>{comment.comment}</div>
+          </CardBody>
+        </Card>
+        {hasAccess(comment.authorEmail) && (
+          <div className="position-absolute end-0 bottom-0 m-3">
+            <Button
+              size="sm"
+              variant="outline-danger"
+              className="me-1"
+              disabled={isProcessing}
+              onClick={() => setDeleteModalShow(true)}
+            >
+              {isProcessing && <Spinner size="sm" />}
+              <BsTrash3 />
+            </Button>
+            <Button
+              size="sm"
+              variant="outline-primary"
+              disabled={isProcessing}
+              onClick={() => setEditModalShow(true)}
+            >
+              {isProcessing && <Spinner size="sm" />}
+              <LuPencil />
+            </Button>
+          </div>
+        )}
       </div>
-      <div>{comment.comment}</div>
-      {hasAccess(comment.authorEmail) && (
-        <div>
-          <Button
-            disabled={isProcessing}
-            onClick={() => setDeleteModalShow(true)}
-          >
-            {isProcessing && <Spinner size="sm" />}
-            삭제
-          </Button>
-          <Button
-            disabled={isProcessing}
-            onClick={() => setEditModalShow(true)}
-          >
-            {isProcessing && <Spinner size="sm" />}
-            수정
-          </Button>
-        </div>
-      )}
 
       {hasAccess(comment.authorEmail) && (
         <>
@@ -134,13 +157,13 @@ export function CommentItem({ comment, isProcessing, setIsProcessing }) {
               >
                 취소
               </Button>
-              <Button variant="danger" onClick={handleUpdateButtonClick}>
+              <Button variant="primary" onClick={handleUpdateButtonClick}>
                 저장
               </Button>
             </Modal.Footer>
           </Modal>
         </>
       )}
-    </div>
+    </>
   );
 }

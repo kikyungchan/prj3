@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Spinner } from "react-bootstrap";
 
-function ComentItem({ comment }) {
+function CommentItem({ comment }) {
   return (
     <div className="border m-3">
       <div className="d-flex justify-content-between m-3">
@@ -14,18 +14,20 @@ function ComentItem({ comment }) {
   );
 }
 
-export function CommentList({ boardId, reloadTrigger }) {
+export function CommentList({ boardId, isProcessing }) {
   const [commentList, setCommentList] = useState(null);
 
   useEffect(() => {
-    axios
-      .get(`/api/comment/board/${boardId}`)
-      .then((res) => {
-        setCommentList(res.data);
-      })
-      .catch((err) => {})
-      .finally(() => {});
-  }, [boardId, reloadTrigger]);
+    if (!isProcessing) {
+      axios
+        .get(`/api/comment/board/${boardId}`)
+        .then((res) => {
+          setCommentList(res.data);
+        })
+        .catch((err) => {})
+        .finally(() => {});
+    }
+  }, [isProcessing]);
 
   if (commentList === null) {
     return <Spinner />;
@@ -34,7 +36,7 @@ export function CommentList({ boardId, reloadTrigger }) {
   return (
     <div>
       {commentList.map((comment) => (
-        <ComentItem comment={comment} key={comment.id} />
+        <CommentItem comment={comment} key={comment.id} />
       ))}
     </div>
   );

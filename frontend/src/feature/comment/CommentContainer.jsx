@@ -3,17 +3,17 @@ import { CommentList } from "./CommentList.jsx";
 import { useState } from "react";
 
 export function CommentContainer({ boardId }) {
-  const [reloadTrigger, setReloadTrigger] = useState(0);
-
-  function handleReload() {
-    setReloadTrigger((prev) => prev + 1);
-  }
+  const [isProcessing, setIsProcessing] = useState(false);
 
   return (
     <div>
       <h3>댓글 창</h3>
-      <CommentAdd boardId={boardId} onSave={handleReload} />
-      <CommentList boardId={boardId} reloadTrigger={reloadTrigger} />
+      <CommentAdd
+        boardId={boardId}
+        isProcessing={isProcessing}
+        setIsProcessing={setIsProcessing}
+      />
+      <CommentList boardId={boardId} isProcessing={isProcessing} />
     </div>
   );
 }

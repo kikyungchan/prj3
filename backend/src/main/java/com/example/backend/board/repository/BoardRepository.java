@@ -55,4 +55,6 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     void deleteByAuthor(Member author);
 
     List<Board> findByAuthor(Member db);
+
+    void deleteByMember(Member db);
 }

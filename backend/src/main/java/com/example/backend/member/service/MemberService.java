@@ -115,6 +115,8 @@ public class MemberService {
             }
             //게시물지우기
             boardRepository.deleteByAuthor(db);
+            //좋아요 지우기
+            boardRepository.deleteByMember(db);
             //회원 정보 지우기
             memberRepository.delete(db);
         } else {

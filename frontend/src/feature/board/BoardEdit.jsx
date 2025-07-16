@@ -1,12 +1,17 @@
 import {
   Button,
   Col,
+  FormCheck,
   FormControl,
   FormGroup,
   FormLabel,
+  Image,
+  ListGroup,
+  ListGroupItem,
   Modal,
   Row,
   Spinner,
+  Stack,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -14,48 +19,56 @@ import { useNavigate, useSearchParams } from "react-router";
 import { toast } from "react-toastify";
 
 export function BoardEdit() {
+  const [board, setBoard] = useState(null);
+  const [files, setFiles] = useState([]); // 새로 추가하는 파일 목록
+  const [deleteFiles, setDeleteFiles] = useState([]); // 삭제할 파일 목록
+  const [searchParams] = useSearchParams();
+  const [modalShow, setModalShow] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const [modalShow, setModalShow] = useState(false);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const [board, setBoard] = useState(null);
+
   useEffect(() => {
     axios
       .get(`/api/board/${searchParams.get("id")}`)
       .then((res) => {
-        console.log("ㅇㅋ");
+        console.log("good");
         setBoard(res.data);
       })
       .catch((err) => {
-        console.log("ㄴㄴ");
+        console.log("bad");
         toast("해당 게시물이 존재하지 않습니다.", { type: "warning" });
       })
       .finally(() => {
-        console.log("항상");
+        console.log("always");
       });
   }, []);
 
   function handleSaveButtonClick() {
     setIsProcessing(true);
     axios
-      .put(`/api/board/${searchParams.get("id")}`, board)
+      .putForm(`/api/board/${searchParams.get("id")}`, {
+        ...board,
+        files: files,
+        deleteFiles: deleteFiles,
+      })
       .then((res) => {
-        console.log("ㅇㅋ");
+        console.log("good");
         const message = res.data.message;
         toast(message.text, { type: message.type });
         navigate(`/board/${board.id}`);
       })
       .catch((err) => {
-        console.log("ㄴㄴ");
+        console.log("bad");
         const message = err.response.data.message;
         if (message) {
-          toast("게시물 수정시 오류가 발생하였습니다.", { type: "warning" });
+          toast(message.text, { type: message.type });
         } else {
+          toast("게시물 수정시 오류가 발생하였습니다.", { type: "warning" });
         }
       })
       .finally(() => {
-        console.log("항상");
+        console.log("always");
         setModalShow(false);
         setIsProcessing(false);
       });
@@ -76,14 +89,14 @@ export function BoardEdit() {
   return (
     <Row className="justify-content-center">
       <Col xs={12} md={8} lg={6}>
-        <h2 className="mb-4">{board.id}게시물 수정</h2>
+        <h2 className="mb-4">{board.id}번 게시물 수정</h2>
         <div>
           <FormGroup className="mb-3" controlId="title1">
             <FormLabel>제목</FormLabel>
             <FormControl
               value={board.title}
               onChange={(e) => setBoard({ ...board, title: e.target.value })}
-            ></FormControl>
+            />
           </FormGroup>
         </div>
         <div>
@@ -94,17 +107,49 @@ export function BoardEdit() {
               rows={6}
               value={board.content}
               onChange={(e) => setBoard({ ...board, content: e.target.value })}
-            ></FormControl>
+            />
+          </FormGroup>
+        </div>
+        <div className="mb-3">
+          {/*   이미 저장된 파일 목록 보기   */}
+          <ListGroup>
+            {board.files.map((file) => (
+              <ListGroupItem key={file.name}>
+                <Stack direction="horizontal" gap={3}>
+                  <FormCheck
+                    type="switch"
+                    value={file.name}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setDeleteFiles([...deleteFiles, e.target.value]);
+                      } else {
+                        setDeleteFiles(
+                          deleteFiles.filter((item) => item !== e.target.value),
+                        );
+                      }
+                    }}
+                  />
+                  <Image fluid src={file.path} />
+                </Stack>
+              </ListGroupItem>
+            ))}
+          </ListGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="files1">
+            <FormLabel>추가 이미지 파일</FormLabel>
+            <FormControl
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={(e) => setFiles(e.target.files)}
+            />
           </FormGroup>
         </div>
         <div>
           <FormGroup className="mb-3" controlId="author1">
             <FormLabel>작성자</FormLabel>
-            <FormControl
-              disabled
-              readOnly
-              value={board.authorNickName}
-            ></FormControl>
+            <FormControl value={board.authorNickName} disabled />
           </FormGroup>
         </div>
         <div>
@@ -118,7 +163,7 @@ export function BoardEdit() {
           <Button
             disabled={!validate || isProcessing}
             onClick={() => setModalShow(true)}
-            variant="outline-primary"
+            variant="primary"
           >
             {isProcessing && <Spinner size="sm" />}
             {isProcessing || "저장"}
@@ -128,7 +173,7 @@ export function BoardEdit() {
 
       <Modal show={modalShow} onHide={() => setModalShow(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>게시물 수정 확인</Modal.Title>
+          <Modal.Title>게시물 저장 확인</Modal.Title>
         </Modal.Header>
         <Modal.Body>{board.id}번 게시물을 수정하시겠습니까?</Modal.Body>
         <Modal.Footer>
@@ -137,7 +182,7 @@ export function BoardEdit() {
           </Button>
           <Button
             disabled={isProcessing}
-            variant="outline-primary"
+            variant="primary"
             onClick={handleSaveButtonClick}
           >
             {isProcessing && <Spinner size="sm" />}

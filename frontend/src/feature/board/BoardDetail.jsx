@@ -8,6 +8,9 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  Image,
+  ListGroup,
+  ListGroupItem,
   Modal,
   Row,
   Spinner,
@@ -17,23 +20,23 @@ import { CommentContainer } from "../comment/CommentContainer.jsx";
 import { LikeContainer } from "../like/LikeContainer.jsx";
 
 export function BoardDetail() {
-  const [modalShow, setModalShow] = useState(false);
   const [board, setBoard] = useState(null);
+  const [modalShow, setModalShow] = useState(false);
+  const { hasAccess } = useContext(AuthenticationContext);
   const { id } = useParams();
   const navigate = useNavigate();
-  const { hasAccess } = useContext(AuthenticationContext);
 
   useEffect(() => {
-    //axios로 해당 게시물 가져오기
+    // axios로 해당 게시물 가져오기
     axios
       .get(`/api/board/${id}`)
       .then((res) => {
-        console.log("잘됌");
+        console.log("잘됨");
         setBoard(res.data);
       })
       .catch((err) => {
-        console.log("않됌");
-        toast("해당 게시물이 없습니다", { type: "warning" });
+        console.log("안됨");
+        toast("해당 게시물이 없습니다.", { type: "warning" });
       })
       .finally(() => {
         console.log("항상");
@@ -46,13 +49,14 @@ export function BoardDetail() {
       .then((res) => {
         console.log("잘됨");
         const message = res.data.message;
+
         if (message) {
           toast(message.text, { type: message.type });
         }
         navigate("/");
       })
       .catch((err) => {
-        console.log("않됌");
+        console.log("안됨");
         toast("게시물이 삭제되지 않았습니다.", { type: "warning" });
       })
       .finally(() => {
@@ -88,6 +92,16 @@ export function BoardDetail() {
             />
           </FormGroup>
         </div>
+        <div className="mb-3">
+          {/*   파일 목록 보기   */}
+          <ListGroup>
+            {board.files.map((file) => (
+              <ListGroupItem key={file.name}>
+                <Image fluid src={file.path} />
+              </ListGroupItem>
+            ))}
+          </ListGroup>
+        </div>
         <div>
           <FormGroup className="mb-3" controlId="author1">
             <FormLabel>작성자</FormLabel>
@@ -108,7 +122,7 @@ export function BoardDetail() {
           <div>
             <Button
               onClick={() => setModalShow(true)}
-              className="me-1"
+              className="me-2"
               variant="outline-danger"
             >
               삭제
@@ -121,6 +135,7 @@ export function BoardDetail() {
             </Button>
           </div>
         )}
+
         <div className="my-5">
           <hr />
         </div>
@@ -138,7 +153,7 @@ export function BoardDetail() {
           <Button variant="outline-dark" onClick={() => setModalShow(false)}>
             취소
           </Button>
-          <Button variant="outline-danger" onClick={handleDeleteButtonClick}>
+          <Button variant="danger" onClick={handleDeleteButtonClick}>
             삭제
           </Button>
         </Modal.Footer>

@@ -1,6 +1,7 @@
 package com.example.backend.board.service;
 
 import com.example.backend.board.dto.BoardAddForm;
+import com.example.backend.board.dto.BoardFileDto;
 import com.example.backend.board.entity.Board;
 import com.example.backend.board.dto.BoardDto;
 import com.example.backend.board.entity.BoardFile;
@@ -23,6 +24,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -137,6 +139,17 @@ public class BoardService {
 
     public BoardDto getBoardById(Integer id) {
         BoardDto board = boardRepository.findBoardById(id);
+        List<BoardFile> fileList = boardFileRepository.findByBoardId(id);
+        List<BoardFileDto> files = new ArrayList<>();
+        for (BoardFile boardFile : fileList) {
+            BoardFileDto fileDto = new BoardFileDto();
+            fileDto.setName(boardFile.getId().getName());
+            fileDto.setPath("http://localhost:8081/boardFile/" + id + "/" + boardFile.getId().getName());
+            files.add(fileDto);
+        }
+        // BoardFileDto 로 옮기고
+
+        board.setFiles(files);
 //        BoardDto dto = new BoardDto();
 //        dto.setTitle(board.getTitle());
 //        dto.setContent(board.getContent());

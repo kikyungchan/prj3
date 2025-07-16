@@ -22,6 +22,7 @@ public class LikeController {
 
     @PutMapping
     public void like(@RequestBody LikeForm likeForm, Authentication authentication) {
+        
         likeService.update(likeForm, authentication);
     }
 }

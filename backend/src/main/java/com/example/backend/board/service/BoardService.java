@@ -8,7 +8,6 @@ import com.example.backend.board.repository.BoardFileRepository;
 import com.example.backend.board.repository.BoardRepository;
 import com.example.backend.comment.repository.CommentRepository;
 import com.example.backend.like.repository.BoardLikeRepository;
-import com.example.backend.member.dto.BoardListDto;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

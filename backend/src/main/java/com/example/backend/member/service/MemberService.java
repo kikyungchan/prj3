@@ -3,6 +3,7 @@ package com.example.backend.member.service;
 import com.example.backend.board.entity.Board;
 import com.example.backend.board.repository.BoardRepository;
 import com.example.backend.comment.repository.CommentRepository;
+import com.example.backend.like.repository.BoardLikeRepository;
 import com.example.backend.member.dto.*;
 import com.example.backend.member.entity.Auth;
 import com.example.backend.member.entity.Member;
@@ -33,6 +34,7 @@ public class MemberService {
     private final AuthRepository authRepository;
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
+    private final BoardLikeRepository boardLikeRepository;
 
     public void add(MemberForm memberForm) {
 
@@ -116,7 +118,7 @@ public class MemberService {
             //게시물지우기
             boardRepository.deleteByAuthor(db);
             //좋아요 지우기
-            boardRepository.deleteByMember(db);
+            boardLikeRepository.deleteByMember(db);
             //회원 정보 지우기
             memberRepository.delete(db);
         } else {

@@ -52,7 +52,10 @@ public class AppConfiguration {
                 .region(Region.AP_NORTHEAST_2)
                 .credentialsProvider(provider)
                 .build();
+
+        return s3Client;
     }
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

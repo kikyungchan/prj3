@@ -39,6 +39,7 @@ INSERT INTO auth
     (member_email, auth_name)
 VALUES ('trump@abc.com', 'admin');
 
+
 SELECT *
 FROM auth;
 

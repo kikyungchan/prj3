@@ -35,13 +35,13 @@ export function CommentContainer({ boardId }) {
         <span>댓글 ({commentList.length})</span>
       </h3>
 
-      <CommentAdd
-        boardId={boardId}
+      <CommentList
+        commentList={commentList}
         isProcessing={isProcessing}
         setIsProcessing={setIsProcessing}
       />
-      <CommentList
-        commentList={commentList}
+      <CommentAdd
+        boardId={boardId}
         isProcessing={isProcessing}
         setIsProcessing={setIsProcessing}
       />

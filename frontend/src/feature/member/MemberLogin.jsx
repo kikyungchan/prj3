@@ -51,6 +51,7 @@ export function MemberLogin() {
     <Row className="justify-content-center">
       <Col xs={12} md={8} lg={6}>
         <h2 className="mb-4">로그인</h2>
+
         <Form onSubmit={handleLogInButtonClick}>
           <FormGroup controlId="email1" className="mb-3">
             <FormLabel>이메일</FormLabel>

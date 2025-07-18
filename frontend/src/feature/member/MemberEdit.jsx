@@ -1,6 +1,7 @@
 import {
   Button,
   Col,
+  Form,
   FormControl,
   FormGroup,
   FormLabel,
@@ -208,54 +209,64 @@ export function MemberEdit() {
       </Modal>
 
       {/* 암호 변경 모달*/}
-      <Modal show={passwordModalShow} onHide={handleCancleButton}>
-        <Modal.Header closeButton>
-          <Modal.Title>암호변경 확인</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <FormGroup className="mb-3" controlId="password2">
-            <FormLabel>현재 암호</FormLabel>
-            <FormControl
-              type="password"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-            />
-          </FormGroup>
-          <FormGroup className="mb-3" controlId="password3">
-            <FormLabel>변경할 암호</FormLabel>
-            <FormControl
-              type="password"
-              value={newPassword1}
-              onChange={(e) => setNewPassword1(e.target.value)}
-            />
-          </FormGroup>
-          <FormGroup className="mb-3" controlId="password4">
-            <FormLabel>변경할 암호 확인</FormLabel>
-            <FormControl
-              type="password"
-              value={newPassword2}
-              onChange={(e) => setNewPassword2(e.target.value)}
-            />
-            {passwordConfirm || (
-              <FormText className="text-danger">
-                패스워드가 일치하지 않습니다.
-              </FormText>
-            )}
-          </FormGroup>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="outline-dark" onClick={handleCancleButton}>
-            취소
-          </Button>
-          <Button
-            variant="outline-primary"
-            onClick={handleChangePasswordButtonClick}
-            disabled={changePasswordButtonDisabled}
-          >
-            변경
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <Form
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            handleChangePasswordButtonClick();
+          }
+        }}
+      >
+        <Modal show={passwordModalShow} onHide={handleCancleButton}>
+          <Modal.Header closeButton>
+            <Modal.Title>암호변경 확인</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <FormGroup className="mb-3" controlId="password2">
+              <FormLabel>현재 암호</FormLabel>
+              <FormControl
+                type="password"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup className="mb-3" controlId="password3">
+              <FormLabel>변경할 암호</FormLabel>
+              <FormControl
+                type="password"
+                value={newPassword1}
+                onChange={(e) => setNewPassword1(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup className="mb-3" controlId="password4">
+              <FormLabel>변경할 암호 확인</FormLabel>
+              <FormControl
+                type="password"
+                value={newPassword2}
+                onChange={(e) => setNewPassword2(e.target.value)}
+              />
+              {passwordConfirm || (
+                <FormText className="text-danger">
+                  패스워드가 일치하지 않습니다.
+                </FormText>
+              )}
+            </FormGroup>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="outline-dark" onClick={handleCancleButton}>
+              취소
+            </Button>
+            <Button
+              type="submit"
+              onClick={handleChangePasswordButtonClick}
+              variant="outline-primary"
+              disabled={changePasswordButtonDisabled}
+            >
+              변경
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </Form>
     </Row>
   );
 }

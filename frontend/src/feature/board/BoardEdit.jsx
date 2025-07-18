@@ -1,6 +1,7 @@
 import {
   Button,
   Col,
+  Form,
   FormCheck,
   FormControl,
   FormGroup,
@@ -194,25 +195,35 @@ export function BoardEdit() {
         </div>
       </Col>
 
-      <Modal show={modalShow} onHide={() => setModalShow(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>게시물 저장 확인</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{board.id}번 게시물을 수정하시겠습니까?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
-            취소
-          </Button>
-          <Button
-            disabled={isProcessing}
-            variant="primary"
-            onClick={handleSaveButtonClick}
-          >
-            {isProcessing && <Spinner size="sm" />}
-            {isProcessing || "저장"}
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <Form
+        onSubmit={handleSaveButtonClick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            handleSaveButtonClick();
+          }
+        }}
+      >
+        <Modal show={modalShow} onHide={() => setModalShow(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>게시물 저장 확인</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{board.id}번 게시물을 수정하시겠습니까?</Modal.Body>
+          <Modal.Footer>
+            <Button
+              type="button"
+              variant="outline-dark"
+              onClick={() => setModalShow(false)}
+            >
+              취소
+            </Button>
+            <Button type="submit" disabled={isProcessing} variant="primary">
+              {isProcessing && <Spinner size="sm" />}
+              {isProcessing || "저장"}
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </Form>
     </Row>
   );
 }

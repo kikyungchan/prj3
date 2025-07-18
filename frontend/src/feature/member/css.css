@@ -1,0 +1,10 @@
+button:focus {
+    outline: none;
+    box-shadow: none;
+    background-color: transparent; /* 필요 시 */
+}
+
+button:hover {
+    background-color: #eee; /* 기존 호버 효과 유지 */
+    cursor: pointer;
+}
